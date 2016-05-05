@@ -25,15 +25,19 @@ import (
 	"strconv"
 	"time"
     "strings"
+	"math/rand"
 
 	"github.com/openblockchain/obc-peer/openchain/chaincode/shim"
 )
+
+
 
 var cpPrefix = "cp:"
 var accountPrefix = "acct:"
 var accountsKey = "accounts"
 
 var recentLeapYear = 2016
+
 
 // SimpleChaincode example simple Chaincode implementation
 type SimpleChaincode struct {
@@ -50,7 +54,7 @@ func generateCUSIPSuffix(issueDate string, days int) (string, error) {
 	month := int(maturityDate.Month())
 	day := maturityDate.Day()
 
-	suffix := seventhDigit[month] + eigthDigit[day]
+	suffix := seventhDigit[month] + eigthDigit[day] + randSeq(3)
 	return suffix, nil
 
 }
@@ -741,12 +745,23 @@ func (t *SimpleChaincode) Run(stub *shim.ChaincodeStub, function string, args []
 	return nil, errors.New("Received unknown function invocation")
 }
 
+func randSeq(n int) string {
+    b := make([]rune, n)
+    for i := range b {
+        b[i] = letters[rand.Intn(len(letters))]
+    }
+    return string(b)
+}
+
+
 func main() {
 	err := shim.Start(new(SimpleChaincode))
 	if err != nil {
 		fmt.Println("Error starting Simple chaincode: %s", err)
 	}
 }
+
+var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 //lookup tables for last two digits of CUSIP
 var seventhDigit = map[int]string{

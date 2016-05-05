@@ -55,6 +55,7 @@ func generateCUSIPSuffix(issueDate string, days int) (string, error) {
 	day := maturityDate.Day()
 
 	suffix := seventhDigit[month] + eigthDigit[day] + randSeq(3)
+	fmt.Println("generated suffix =" + suffix)
 	return suffix, nil
 
 }
@@ -269,6 +270,10 @@ func (t *SimpleChaincode) issueCommercialPaper(stub *shim.ChaincodeStub, args []
 		fmt.Println("error invalid paper issue")
 		return nil, errors.New("Invalid commercial paper issue")
 	}
+	
+	var jsonStr string
+	jsonStr = json.Marshal(&cp)
+	fmt.Println("commpaper json: "+jsonStr)
 
 	//generate the CUSIP
 	//get account prefix
@@ -744,6 +749,7 @@ func (t *SimpleChaincode) Run(stub *shim.ChaincodeStub, function string, args []
 
 	return nil, errors.New("Received unknown function invocation")
 }
+
 
 func randSeq(n int) string {
     b := make([]rune, n)

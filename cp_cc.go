@@ -271,10 +271,10 @@ func (t *SimpleChaincode) issueCommercialPaper(stub *shim.ChaincodeStub, args []
 		return nil, errors.New("Invalid commercial paper issue")
 	}
 	
-	var jsonStr string
-	jsonStr = json.Marshal(&cp)
-	fmt.Println("commpaper json: "+jsonStr)
-
+	// printout json
+	fmt.Println("commpaper json: "+string(args[0]))
+	
+	
 	//generate the CUSIP
 	//get account prefix
 	fmt.Println("Getting state of - " + accountPrefix + cp.Issuer)
